@@ -1,3 +1,6 @@
 {
-  "mailgunApiKey": ""
+  "mailgun": {
+    "apiKey": "",
+    "domain": ""
+  }
 }
