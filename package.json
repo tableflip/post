@@ -39,5 +39,9 @@
     "postcss-cli": "^2.5.1",
     "postcss-cssnext": "^2.5.1",
     "postcss-import": "^8.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tableflip/post.git"
   }
 }
