@@ -1,7 +1,7 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 var db = require('./db')
-var Mail = require('./mailer')
+var Mail = require('.emails/mailer')
 var mailer = new Mail(db)
 
 var app = express()
