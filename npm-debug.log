@@ -1,0 +1,46 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/bernie/.nvm/versions/node/v4.2.1/bin/node',
+1 verbose cli   '/Users/bernie/.nvm/versions/node/v4.2.1/bin/npm',
+1 verbose cli   'run',
+1 verbose cli   'serve' ]
+2 info using npm@3.5.0
+3 info using node@v4.2.1
+4 verbose run-script [ 'preserve', 'serve', 'postserve' ]
+5 info lifecycle post@1.0.0~preserve: post@1.0.0
+6 silly lifecycle post@1.0.0~preserve: no script for preserve, continuing
+7 info lifecycle post@1.0.0~serve: post@1.0.0
+8 verbose lifecycle post@1.0.0~serve: unsafe-perm in lifecycle true
+9 verbose lifecycle post@1.0.0~serve: PATH: /Users/bernie/.nvm/versions/node/v4.2.1/lib/node_modules/npm/bin/node-gyp-bin:/Users/bernie/Code/post/node_modules/.bin:/Users/bernie/.nvm/versions/node/v4.2.1/lib/node_modules/npm/bin/node-gyp-bin:/Users/bernie/Code/post/node_modules/.bin:/Users/bernie/.nvm/versions/node/v4.2.1/lib/node_modules/npm/bin/node-gyp-bin:/Users/bernie/Code/post/node_modules/.bin:/usr/local/heroku/bin:/Users/bernie/.nvm/versions/node/v4.2.1/bin:/usr/local/opt/php56/bin:/Users/bernie/.rvm/gems/ruby-2.0.0-p353/bin:/Users/bernie/.rvm/gems/ruby-2.0.0-p353@global/bin:/Users/bernie/.rvm/rubies/ruby-2.0.0-p353/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/bernie/Documents/Sites/NodeBot/mongodb/bin/mongo:/opt/X11/bin:/usr/local/MacGPG2/bin:/Users/bernie/.rvm/bin:/usr/local/sbin
+10 verbose lifecycle post@1.0.0~serve: CWD: /Users/bernie/Code/post
+11 silly lifecycle post@1.0.0~serve: Args: [ '-c', 'node server.js' ]
+12 silly lifecycle post@1.0.0~serve: Returned: code: 1  signal: null
+13 info lifecycle post@1.0.0~serve: Failed to exec serve script
+14 verbose stack Error: post@1.0.0 serve: `node server.js`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (/Users/bernie/.nvm/versions/node/v4.2.1/lib/node_modules/npm/lib/utils/lifecycle.js:232:16)
+14 verbose stack     at emitTwo (events.js:87:13)
+14 verbose stack     at EventEmitter.emit (events.js:172:7)
+14 verbose stack     at ChildProcess.<anonymous> (/Users/bernie/.nvm/versions/node/v4.2.1/lib/node_modules/npm/lib/utils/spawn.js:24:14)
+14 verbose stack     at emitTwo (events.js:87:13)
+14 verbose stack     at ChildProcess.emit (events.js:172:7)
+14 verbose stack     at maybeClose (internal/child_process.js:818:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+15 verbose pkgid post@1.0.0
+16 verbose cwd /Users/bernie/Code/post
+17 error Darwin 14.5.0
+18 error argv "/Users/bernie/.nvm/versions/node/v4.2.1/bin/node" "/Users/bernie/.nvm/versions/node/v4.2.1/bin/npm" "run" "serve"
+19 error node v4.2.1
+20 error npm  v3.5.0
+21 error code ELIFECYCLE
+22 error post@1.0.0 serve: `node server.js`
+22 error Exit status 1
+23 error Failed at the post@1.0.0 serve script 'node server.js'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the post package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     node server.js
+23 error You can get their info via:
+23 error     npm owner ls post
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]

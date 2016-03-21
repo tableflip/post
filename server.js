@@ -1,6 +1,7 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 var db = require('./db')
+var mailer = require('./mailer')
 
 var app = express()
 app.enable('trust proxy')
@@ -11,10 +12,16 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.post('/', (req, res) => {
   db.save(req, (err, data) => {
     if (err) {
-      console.error(err)
-      res.redirect(req.headers.referer + '?sent=true')
+      console.error('in server.js db error', err)
+      return res.redirect(req.headers.referer + '?sent=false')
     }
-    res.redirect(req.headers.referer + '?sent=false')
+    mailer(data, function (err) {
+      if (err) {
+        console.error('in server.js mailer error', err)
+        res.redirect(req.headers.referer + '?sent=false')
+      }
+      res.redirect(req.headers.referer + '?sent=true')
+    })
   })
 })
 
@@ -31,4 +38,3 @@ app.use(express.static('dist'))
 app.listen(1337, '127.0.0.1', () => {
   console.log('Running')
 })
-

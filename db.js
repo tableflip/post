@@ -2,6 +2,10 @@ var crypto = require('crypto')
 var levelup = require('levelup')
 var db = levelup('./db', {valueEncoding: 'json'})
 
+module.exports.returnInstance = function () {
+  return db
+}
+
 module.exports.save = function (req, done) {
   var kv = keyValue(req)
   db.put(kv.key, kv.value, (err, res) => {
