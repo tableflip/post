@@ -1,17 +1,26 @@
 var settings = require('./settings.json')
-var db = require('./db').returnInstance()
 var mailer = require('mailgun-js')(settings.mailgun)
 
-module.exports = function (data, cb) {
-  var text = JSON.stringify(data.value.body)
+var Mail = function Mail (db) {
+  if (!db) throw new Error('The mailer module needs an instance of the database')
+  this.db = db
+  this.mailer = mailer
+}
+
+Mail.prototype.send = function (data, cb) {
+  var self = this
+  // body will be an email template
+  var body = JSON.stringify(data.value.body)
   var email = {
     from: data.value.body.email,
-    to: 'hello@tableflip.io',
+    to: 'bernard@tableflip.io',
     subject: 'NEW StartUP! - ' + data.value.body['project-name'],
-    text: text
+    text: body
   }
-  mailer.messages().send(email, function (err, mailgunResponse) {
+  self.mailer.messages().send(email, function (err, mailgunResponse) {
     if (err) return cb(err)
-    db.del(data.key, cb)
+    self.db.del(data.key, cb)
   })
 }
+
+module.exports = Mail

@@ -2,8 +2,8 @@ var crypto = require('crypto')
 var levelup = require('levelup')
 var db = levelup('./db', {valueEncoding: 'json'})
 
-module.exports.returnInstance = function () {
-  return db
+module.exports.del = function (key, done) {
+  db.del(key, done)
 }
 
 module.exports.save = function (req, done) {
