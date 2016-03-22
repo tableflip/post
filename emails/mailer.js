@@ -24,7 +24,7 @@ Mail.prototype.send = function (data, domain, template, cb) {
       self.mailer.messages().send(emailPayload, done)
     }
   ], (err) => {
-    if (err) throw new Error('email error')
+    if (err) throw new Error('email error', err)
     self.db.del(data.key, cb)
   })
 }
@@ -39,15 +39,12 @@ function getEmailTpl (domain, template, cb) {
 }
 
 function parseEmailData (tpl, data, cb) {
-  data.value.body.projectName = data.value.body['project-name']
-  data.value.body.openSource = data.value.body['open-source']
-
-  var body = tpl(data.value.body)
+  var body = tpl({body: data.value.body})
 
   var payload = {
     from: data.value.body.email,
-    to: 'hello@tableflip.io',
-    subject: 'NEW StartUP! - ' + data.value.body.projectName,
+    to: 'bernard@tableflip.io',
+    subject: data.value.body.subject,
     html: body
   }
 
@@ -55,7 +52,7 @@ function parseEmailData (tpl, data, cb) {
 }
 
 function getTplLocation (domain, template) {
-  return path.normalize(path.join(__dirname, '..', 'emails/templates/' + domain + '/' + template + '.jade'))
+  return path.normalize(path.join(__dirname, '..', `emails/templates/${domain}/${template}.jade`))
 }
 
 module.exports = Mail

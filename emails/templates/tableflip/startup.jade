@@ -1,5 +1,5 @@
-section
-  h1 Start#[sup UP!] #{projectName}
+article
+  h1 Start#[sup UP!] #{body['project-name']}
 
   table
     tr
@@ -7,18 +7,18 @@ section
         strong Project Details
     tr
       td name
-      td=name
+      td=body.name
     tr
       td email
-      td=email
+      td=body.email
     tr
       td budget
-      td=budget
+      td=body.budget
     tr
       td designs
-      td=designs
+      td=body.designs
     tr
       td open-source
-      td=openSource
+      td=body['open-source']
 
-  p=aim
+  p=body.aim

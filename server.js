@@ -10,9 +10,9 @@ app.disable('x-powered-by')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.post('/email/:domain/:templates', (req, res) => {
-  var domain = req.params.domain || 'default'
-  var template = req.params.templates || 'default'
+app.post('/email/:domain/:template', (req, res) => {
+  var domain = req.params.domain
+  var template = req.params.template
 
   db.save(req, (err, data) => {
     if (err) {
