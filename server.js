@@ -1,7 +1,7 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 var db = require('./db')
-var Mail = require('.emails/mailer')
+var Mail = require('./emails/mailer')
 var mailer = new Mail(db)
 
 var app = express()
@@ -10,13 +10,16 @@ app.disable('x-powered-by')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.post('/', (req, res) => {
+app.post('/email/:domain/:templates', (req, res) => {
+  var domain = req.params.domain || 'default'
+  var template = req.params.templates || 'default'
+
   db.save(req, (err, data) => {
     if (err) {
       console.error('in server.js db error', err)
       return res.redirect(req.headers.referer + '?sent=false')
     }
-    mailer.send(data, function (err) {
+    mailer.send(data, domain, template, function (err) {
       if (err) {
         console.error('in server.js mailer error', err)
         res.redirect(req.headers.referer + '?sent=false')
