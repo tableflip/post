@@ -8,6 +8,11 @@ html(lang='en')
   body
     +navbar('inbox')
     
-    #messages.mt3.max-width-4.mx-auto
+    .max-width-4.mx-auto.mt3
+      
+      p.lead Messages that are succesfully sent on are deleted from <code>P O S T</code>. 
+      p Any messages listed below are stuck in limbo and should be manually forwarded on.
+      
+    #messages.p3
     
     script(src=meta.relativePathToRoot + '/bundle.js')

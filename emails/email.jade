@@ -1,0 +1,11 @@
+p
+  strong New message submitted via #{key}
+
+table(style="table-layout: fixed; width: 100%;")
+  each val, label in body
+    tr
+      td(style="width:35%; font-size:larger; text-transform: capitalize; font-weight:bold") #{label}
+      td(style="width:65%; font-size:larger") #{val}
+
+p(style="font-family:monospace") Sent via 
+  a(href="https://tableflip.io") TABLEFLIP

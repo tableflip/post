@@ -1,6 +1,6 @@
+var start = Date.now()
 var db = require('./db')
-// var Mail = require('./emails/mailer')
-// var mailer = new Mail(db)
+var mailer = require('./emails/mailer.js')(db)
 var express = require('express')
 var bodyParser = require('body-parser')
 
@@ -22,5 +22,5 @@ routes.forEach(function (route) {
 app.use(express.static('dist'))
 
 app.listen(1337, '127.0.0.1', () => {
-  console.log('Running')
+  console.log('P O S T - started in %sms', Date.now() - start)
 })

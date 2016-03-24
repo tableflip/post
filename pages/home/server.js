@@ -2,55 +2,65 @@ var crypto = require('crypto')
 var makeRouteKeys = require('../routes/keys')
 
 module.exports = function (app, db) {
+
+  // Store messages that we recieve as posts, if we find a matching route
   app.post('/:domain*', (req, res) => {
     var domain = req.params.domain
     var path = req.params[0]
-    var routeKeys = makeRouteKeys(domain, path)
-    db.get(routeKeys[0], function (err, route) {
-      if (err && err.notFound && routeKeys[1]) {
-        db.get(routeKeys[1], function (err, route) {
-          handleRoute(err, route, domain, path, req, res)
-        })
-      } else {
-        handleRoute(err, route, domain, path, req, res)
-      }
+
+    findRoute(domain, path, (err, route) => {
+      if (err && err.notfound) return res.sendStatus(404) // no route configured, domain or route specifc.
+      if (err) return res.redirect('back') // Misc fail. Send them home.
+
+      // we have a winner. Store the msg.
+      var value = makeValue(req, domain, path, route)
+      var key = makeKey(value)
+      var referer = req.headers.referer
+
+      db.put(key, value, (err, data) => {
+        if (err) {
+          console.error('Failed to save message', key, value, err.message)
+          return res.redirect(makeRedirect(route.redirectError, referer))
+        }
+        res.redirect(makeRedirect(route.redirect, referer))
+      })
     })
   })
 
-  function handleRoute (err, route, domain, path, req, res) {
-    if (err && err.notfound) return res.sendStatus(404) // probably a duche. 404 them.
-    if (err) return res.redirect('back') // don't die on this hill. Send them home.
-
-    // we have a winner.
-    var value = makeValue(req, domain, path)
-    var key = makeKey(value)
-
-    // TODO: ensure is a valid url
-    var redirect = route.redirect.indexOf('http') === 0  ? route.redirect : req.headers.referer + route.redirect
-    var redirectError = route.redirectError.indexOf('http') === 0  ? route.redirectError : req.headers.referer + route.redirectError
-
-    db.put(key, value, (err, data) => {
-      if (err) {
-        return res.redirect(redirectError)
-        console.error('Error home', err.message)
+  // Look up route for domain + path. Fallback to domain route if not found.
+  function findRoute (domain, path, done) {
+    var routeKeys = makeRouteKeys(domain, path)
+    db.get(routeKeys[0], (err, route) => {
+      if (err && err.notFound && routeKeys[1]) {
+        db.get(routeKeys[1], done)
+      } else {
+        done(err, route)
       }
-      res.redirect(redirect)
     })
   }
 }
 
-function makeValue (req, domain, path) {
-  var referer = path ? domain + path : domain
+// Return url if absolute. Append url to referer if not.
+function makeRedirect (url, referer) {
+  return url.indexOf('http') === 0  ? url : referer + url
+}
+
+function makeValue (req, domain, path, route) {
   return {
+    key: path ? domain + path : domain,
     body: req.body,
-    referer: referer,
-    headers: req.headers,
+    headers: {
+      referer: req.headers.referer,
+      'user-agent': req.headers.userAgent
+    },
+    route: route,
     createdAt: Date.now()
   }
 }
 
+// timestamp for sorting, hash for uniqueness
 function makeKey (value) {
-  var hash = crypto.createHash('md5').update(JSON.stringify(value)).digest('hex')
+  var hash = crypto.createHash('md5').update(JSON.stringify(value.body)).digest('hex')
   var key = ['msg', value.createdAt, hash].join('!')
   return key
 }

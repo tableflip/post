@@ -1,68 +1,35 @@
-var settings = require('../settings.json')
-var mailer = require('mailgun-js')(settings.mailgun)
-var jade = require('jade')
-var fs = require('fs')
-var path = require('path')
 var async = require('async')
+var config = require('config')
+var mailgun = require('mailgun-js')(config.mailgun)
+var jade = require('jade')
+var emailTpl = jade.compileFile(__dirname + '/email.jade')
 
-var Mail = function Mail (db) {
+module.exports = function init (db) {
   if (!db) throw new Error('The mailer module needs an instance of the database')
-  this.db = db
-  this.mailer = mailer
-  db.on('?', () => {
-    mailer.send(data, domain, template, function (err) {
-      if (err) {
-        console.error('in server.js mailer error', err)
-        res.redirect(req.headers.referer + '?sent=false')
-      }
-      res.redirect(req.headers.referer + '?sent=true')
+
+  // Send emails after a put. TODO: throttle and batch / digest.
+  db.on('put', (key, value) => {
+    if (key.indexOf('msg!') !== 0) return
+    if (!value.route) return
+    if (!value.route.email) return
+    setImmediate(() => {
+      sendEmail(value, (err) => {
+        if (err) return console.error('Error sending email', err)
+        db.del(key, (err) => {
+          if (err) return console.error('Email sent, but failed to remove msg', data.key, err)
+        })
+      })
     })
   })
 }
 
-Mail.prototype.send = function (data, domain, template, cb) {
-  var self = this
-  async.waterfall([
-    (done) => {
-      getEmailTpl(domain, template, done)
-    },
-    (tpl, done) => {
-      parseEmailData(tpl, data, done)
-    },
-    (emailPayload, done) => {
-      self.mailer.messages().send(emailPayload, done)
-    }
-  ], (err) => {
-    if (err) throw new Error('email error', err)
-    self.db.del(data.key, cb)
-  })
-}
-
-function getEmailTpl (domain, template, cb) {
-  var templateLocation = getTplLocation(domain, template)
-  fs.readFile(templateLocation, function (err, tplBuffer) {
-    if (err) return cb(err)
-    var tpl = jade.compile(tplBuffer.toString(), {})
-    cb(null, tpl)
-  })
-}
-
-function parseEmailData (tpl, data, cb) {
-  var body = tpl({body: data.value.body})
-
-  var payload = {
-    from: data.value.body.email,
-    to: 'bernard@tableflip.io',
-    subject: data.value.body.subject,
-    html: body
+function sendEmail (message, done) {
+  var data = {
+    to: message.route.email,
+    from: 'TABLEFLIP <post@tableflip.io>',
+    subject: message.body.subject || '[POST] Message from ' + message.key,
+    html: emailTpl(message)
   }
-
-  cb(null, payload)
+  // Fire!
+  mailgun.messages().send(data, done)
 }
-
-function getTplLocation (domain, template) {
-  return path.normalize(path.join(__dirname, '..', `emails/templates/${domain}/${template}.jade`))
-}
-
-module.exports = Mail
-
