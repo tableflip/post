@@ -9,6 +9,15 @@ var Mail = function Mail (db) {
   if (!db) throw new Error('The mailer module needs an instance of the database')
   this.db = db
   this.mailer = mailer
+  db.on('?', () => {
+    mailer.send(data, domain, template, function (err) {
+      if (err) {
+        console.error('in server.js mailer error', err)
+        res.redirect(req.headers.referer + '?sent=false')
+      }
+      res.redirect(req.headers.referer + '?sent=true')
+    })
+  })
 }
 
 Mail.prototype.send = function (data, domain, template, cb) {
@@ -56,3 +65,4 @@ function getTplLocation (domain, template) {
 }
 
 module.exports = Mail
+

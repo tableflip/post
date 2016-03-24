@@ -23,3 +23,9 @@ route!tableflip.io => { email: 'hello@tableflip.io', frequency: 'daily' }
 route!tableflip.io/startup => { email: 'hello@tableflip.io', frequency: 'all' }
 route!marmalade-productions.com => { email: 'hello@tableflip.io', frequency: 'daily' }
 ```
+
+We look up for a specific match on domain + path, then a domain match if there isn't a specific match.
+
+1. lookup `tableflip.io/foo/bar`, not found.
+2. lookup `tableflip.io`. found; make it so.
+

@@ -6,6 +6,10 @@ html(lang='en')
     include ../head.jade
     title POST - The TABLEFLIP contact form handler
   body
-    +navbar('home')
-
+    +navbar('routes')
+    .max-width-2.mx-auto.mt3
+      include create.jade
+    
+    #list.max-width-2.mx-auto.mt3
+    
     script(src=meta.relativePathToRoot + '/bundle.js')

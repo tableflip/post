@@ -1,0 +1,19 @@
+table.fit
+  thead
+    tr
+      th.p1.border-bottom.border-gray(width=100) Time ago
+      th.p1.border-bottom.border-gray Referrer
+      th.p1.border-bottom.border-gray Post
+  tbody
+    each msg in messages
+      tr.border-bottom.border-gray
+        td.p1.border-bottom.border-gray
+          small(title=msg.createdAt)= msg.fromNow
+        td.p1.border-bottom.border-gray
+          a(href=msg.referer)
+            small=msg.refererShort
+        td.border-bottom.border-gray
+          .overflow-hidden.no-wrap
+            each val, key in msg.body
+              //- small.pr1 #{key}:
+              span.p1= val

@@ -1,0 +1,6 @@
+mixin navbar (page)
+  nav.clearfix.block.bg-inverse
+    a.btn.p2.border-none.inline.right.xs-hide.muted (╯°□°）╯︵ ┻━┻
+    a.btn.p2.white.border-none.caps(href="/") Post
+    a.btn.p2.regular.white.border-none(class={'nav-active': page === 'inbox'} href="/inbox") Inbox
+    a.btn.p2.regular.white.border-none(class={'nav-active': page === 'routes'} href="/routes") Routes
