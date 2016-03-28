@@ -32,6 +32,7 @@
     "moment": "^2.12.0"
   },
   "devDependencies": {
+    "async": "^1.5.2",
     "basscss": "^8.0.1",
     "basscss-background-colors": "^2.1.0",
     "basscss-border-colors": "^2.1.0",
@@ -39,7 +40,6 @@
     "basscss-btn-primary": "^1.1.0",
     "basscss-colors": "^2.2.0",
     "basscss-forms": "^1.0.0",
-    "browserify": "^13.0.0",
     "browserify": "^13.0.0",
     "find": "^0.2.4",
     "jade": "^1.11.0",
