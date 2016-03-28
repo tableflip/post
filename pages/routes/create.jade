@@ -1,0 +1,14 @@
+form(method="post" action="/routes")#create
+  label(for="referer").label Post from
+  input(type="url" name="referer" id="referer" required).input
+  
+  label(for="email").label Email to
+  input(type="email" name="email" id="email" required).input
+  
+  label(for="referer").label Redirect on sent
+  input(type="text" name="redirect" id="redirect" value="?sent=true" required).input
+  
+  label(for="redirectError").label Redirect on error
+  input(type="text" name="redirectError" id="redirectError" value="?sent=false" required).input
+  
+  button(type="submit").btn.btn-primary Save

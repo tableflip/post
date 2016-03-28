@@ -1,0 +1,11 @@
+extends ../layout.jade
+include ../navbar.jade
+
+block content
+  +navbar('inbox')
+  .p3
+    p.lead Messages that are succesfully sent on are deleted from <code>P O S T</code>. 
+    p
+    strong Any messages listed below are stuck in limbo and should be manually forwarded on.
+    
+  #messages.p3

@@ -35,6 +35,7 @@ find.file(/\index.jade$/, inputDir, (files) => {
     try { content = require(task.content)  } catch (e) { /* THIS IS FINE. */ }
     try { facts = require('../facts.json') } catch (e) { /* THIS IS FINE. */ }
     var locals = {
+      name: task.name,
       meta: task.meta,
       content: content,
       facts: facts,

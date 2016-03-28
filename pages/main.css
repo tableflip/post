@@ -1,3 +1,5 @@
+@import 'basscss-btn';
+@import 'basscss-btn-primary';
 @import 'basscss-type-scale';
 @import 'basscss-typography';
 @import 'basscss-layout';
@@ -9,19 +11,75 @@
 @import 'basscss-border';
 @import 'basscss-hide';
 @import 'basscss-forms';
+@import 'basscss-colors';
+@import 'basscss-background-colors';
+@import 'basscss-border-colors';
 
 :root {
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   --font-family-serif: Georgia, serif;
   --font-family-monospace: 'Droid Sans Mono', 'Monaco', 'Courier New', monospace;
-  --brand-primary: hotpink;
+  --brand-primary: #FFC107;
+  --brand-inverse: #37474F;
+  --body-bg: whitesmoke;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height:100%;
 }
 
 body {
   font-family: var(--font-family-sans-serif);
-  background: var(--brand-primary);
+  background: var(--body-bg);
+  padding:0;
+  margin:0;
 }
 
 .input, .textarea, .select {
   box-sizing: border-box;
+}
+
+.bg-inverse {
+  background-color: var(--brand-inverse);
+  color: white;
+}
+
+.no-wrap {
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.nav-active {
+  box-shadow: inset 0px -4px 0px var(--body-bg);
+}
+
+a {
+  color: #07c;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  width:100%;
+}
+
+th {
+  text-align:left;
+}
+
+.border-4 {
+  border:solid 4px var(--brand-inverse);
+}
+.border-inverse {
+  border-color: var(--brand-inverse);
+}
+
+.page-home {
+  background: url('http://orig11.deviantart.net/f8e8/f/2014/178/f/e/taco_cat_in_space_by_jayro_jones-d7o5mow.jpg');
+  background-size: cover;
 }

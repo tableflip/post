@@ -1,0 +1,14 @@
+extends ../layout.jade
+include ../navbar.jade
+
+block content
+  +navbar('routes')
+  .clearfix
+    .sm-col.sm-col-6
+      .p3
+        h2 Create a route
+        include create.jade
+    .sm-col.sm-col-6
+      .p3
+        h2 Existing routes
+        #list
