@@ -1,4 +1,5 @@
 {
+  "port": "1337",
   "mailgun": {
     "apiKey": "",
     "domain": ""

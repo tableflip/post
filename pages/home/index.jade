@@ -1,11 +1,5 @@
+extends ../layout.jade
 include ../navbar.jade
 
-doctype html
-html(lang='en')
-  head
-    include ../head.jade
-    title POST - The TABLEFLIP contact form handler
-  body
-    +navbar('home')
-    .mx-auto.max-width-4.mt4
-    script(src=meta.relativePathToRoot + '/bundle.js')
+block content
+  +navbar('home')

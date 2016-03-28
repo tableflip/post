@@ -1,3 +1,4 @@
-.border.rounded
-  each route in data
-    .p2.border-bottom.border-gray #{route.refererShort} => #{route.email}
+each route in data
+  .p2.border-bottom.border-primary 
+    a(href=route.referer) #{route.refererShort} 
+    | => #{route.email}

@@ -1,0 +1,11 @@
+doctype html
+html(lang='en').border-4.border-inverse
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='description', content='Contact form handler for otherwise static sites')
+    link(rel='stylesheet', href=meta.relativePathToRoot + '/bundle.css')
+    title POST ≈ The TABLEFLIP contact form handler
+  body(class="page-#{name}")
+    block content
+    script(src=meta.relativePathToRoot + '/bundle.js')

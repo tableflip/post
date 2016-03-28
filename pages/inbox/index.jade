@@ -1,18 +1,11 @@
+extends ../layout.jade
 include ../navbar.jade
 
-doctype html
-html(lang='en')
-  head
-    include ../head.jade
-    title POST - The TABLEFLIP contact form handler
-  body
-    +navbar('inbox')
+block content
+  +navbar('inbox')
+  .p3
+    p.lead Messages that are succesfully sent on are deleted from <code>P O S T</code>. 
+    p
+    strong Any messages listed below are stuck in limbo and should be manually forwarded on.
     
-    .max-width-4.mx-auto.mt3
-      
-      p.lead Messages that are succesfully sent on are deleted from <code>P O S T</code>. 
-      p Any messages listed below are stuck in limbo and should be manually forwarded on.
-      
-    #messages.p3
-    
-    script(src=meta.relativePathToRoot + '/bundle.js')
+  #messages.p3

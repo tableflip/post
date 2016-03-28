@@ -28,6 +28,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height:100%;
+}
+
 body {
   font-family: var(--font-family-sans-serif);
   background: var(--body-bg);
@@ -66,4 +70,16 @@ table {
 
 th {
   text-align:left;
+}
+
+.border-4 {
+  border:solid 4px var(--brand-inverse);
+}
+.border-inverse {
+  border-color: var(--brand-inverse);
+}
+
+.page-home {
+  background: url('http://orig11.deviantart.net/f8e8/f/2014/178/f/e/taco_cat_in_space_by_jayro_jones-d7o5mow.jpg');
+  background-size: cover;
 }
