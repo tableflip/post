@@ -3,5 +3,8 @@
   "mailgun": {
     "apiKey": "",
     "domain": ""
+  },
+  "akismet": {
+    "apiKey": ""
   }
 }

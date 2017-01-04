@@ -7,6 +7,7 @@ Periodically sent on to recipients.
 ## Getting started
 
 Copy `config/defaults.json` to `config/local.json` and fill out your mailgun credentials.
+Use a wordpress account to create an [Akismet](https://akismet.com/account/) api key.
 
 **From the command line**
 
@@ -61,5 +62,7 @@ We look up for a specific match on domain + path, then a domain match if there i
 2. lookup `tableflip.io`. found; make it so.
 
 ---
+
+Spam filtering courtesy of [Akismet](https://akismet.com) add new domains to the file in `/lib/akismet-spam-filter`
 
 A [(╯°□°）╯︵TABLEFLIP](https://tableflip.io) side project.

@@ -1,28 +1,41 @@
 var crypto = require('crypto')
 var makeRouteKeys = require('../routes/keys')
+var akismet = require('../../lib/akismet-spam-filter')
 
 module.exports = function (app, db) {
-
   // Store messages that we recieve as posts, if we find a matching route
   app.post('/:domain*', (req, res) => {
     var domain = req.params.domain
     var path = req.params[0]
+    var userIp = req.connection.remoteAddress
+    var userAgent = req.headers['user-agent']
 
-    findRoute(domain, path, (err, route) => {
-      if (err && err.notfound) return res.sendStatus(404) // no route configured, domain or route specifc.
-      if (err) return res.redirect('back') // Misc fail. Send them home.
+    if (!akismet[domain]) throw new Error(domain + ' is not configured in /lib/akismet-spam-filter.js')
 
-      // we have a winner. Store the msg.
-      var value = makeValue(req, domain, path, route)
-      var key = makeKey(value)
-      var referer = req.headers.referer
+    akismet[domain].checkSpam({
+      user_ip: userIp,
+      user_agent: userAgent,
+      referrer: domain
+    }, function (err, spam) {
+      if (err) console.error(err) // carry on if akismet service errors
+      if (spam) return console.log('Spam from', domain, new Date())
 
-      db.put(key, value, (err, data) => {
-        if (err) {
-          console.error('Failed to save message', key, value, err.message)
-          return res.redirect(makeRedirect(route.redirectError, referer))
-        }
-        res.redirect(makeRedirect(route.redirect, referer))
+      findRoute(domain, path, (err, route) => {
+        if (err && err.notfound) return res.sendStatus(404) // no route configured, domain or route specifc.
+        if (err) return res.redirect('back') // Misc fail. Send them home.
+
+        // we have a winner. Store the msg.
+        var value = makeValue(req, domain, path, route)
+        var key = makeKey(value)
+        var referer = req.headers.referer
+
+        db.put(key, value, (err, data) => {
+          if (err) {
+            console.error('Failed to save message', key, value, err.message)
+            return res.redirect(makeRedirect(route.redirectError, referer))
+          }
+          res.redirect(makeRedirect(route.redirect, referer))
+        })
       })
     })
   })
@@ -42,7 +55,7 @@ module.exports = function (app, db) {
 
 // Return url if absolute. Append url to referer if not.
 function makeRedirect (url, referer) {
-  return url.indexOf('http') === 0  ? url : referer + url
+  return url.indexOf('http') === 0 ? url : referer + url
 }
 
 function makeValue (req, domain, path, route) {

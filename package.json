@@ -23,6 +23,7 @@
   "author": "olizilla <oli@tableflip.io>",
   "license": "ISC",
   "dependencies": {
+    "akismet-api": "^2.2.0",
     "body-parser": "^1.15.0",
     "config": "^1.19.0",
     "express": "^4.13.4",
