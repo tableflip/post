@@ -12,7 +12,14 @@ module.exports = function init (db) {
     if (key.indexOf('msg!') !== 0) return
     if (!value.route) return
     if (!value.route.email) return
-    if (!value.headers['X-Spam-Flag'] || value.headers['X-Spam-Flag'] === 'YES') return
+    if (!value.headers['X-Spam-Flag']) return
+    if (value.headers['X-Spam-Flag'] === 'YES') {
+      console.log('Spam from', value.key)
+      db.del(key, (err) => {
+        if (err) return console.error('Failed to remove msg', key, err)
+        return console.log('Removed msg', key)
+      })
+    }
 
     setImmediate(() => {
       sendEmail(value, (err) => {

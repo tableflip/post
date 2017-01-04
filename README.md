@@ -63,6 +63,4 @@ We look up for a specific match on domain + path, then a domain match if there i
 
 ---
 
-Spam filtering courtesy of [Akismet](https://akismet.com) add new domains to the file in `/lib/akismet-spam-filter`
-
 A [(╯°□°）╯︵TABLEFLIP](https://tableflip.io) side project.
