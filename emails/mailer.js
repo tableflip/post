@@ -1,8 +1,8 @@
-var async = require('async')
 var config = require('config')
+var path = require('path')
 var mailgun = require('mailgun-js')(config.mailgun)
 var jade = require('jade')
-var emailTpl = jade.compileFile(__dirname + '/email.jade')
+var emailTpl = jade.compileFile(path.join(__dirname, '/email.jade'))
 
 module.exports = function init (db) {
   if (!db) throw new Error('The mailer module needs an instance of the database')
@@ -12,11 +12,13 @@ module.exports = function init (db) {
     if (key.indexOf('msg!') !== 0) return
     if (!value.route) return
     if (!value.route.email) return
+    if (!value.headers['X-Spam-Flag'] || value.headers['X-Spam-Flag'] === 'YES') return
+
     setImmediate(() => {
       sendEmail(value, (err) => {
         if (err) return console.error('Error sending email', err)
         db.del(key, (err) => {
-          if (err) return console.error('Email sent, but failed to remove msg', data.key, err)
+          if (err) return console.error('Email sent, but failed to remove msg', key, err)
         })
       })
     })

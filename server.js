@@ -1,6 +1,7 @@
 var start = Date.now()
 var db = require('./db')
 var mailer = require('./emails/mailer.js')(db)
+var spam = require('./emails/spam.js')(db)
 var config = require('config')
 var express = require('express')
 var bodyParser = require('body-parser')
