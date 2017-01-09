@@ -7,6 +7,7 @@ Periodically sent on to recipients.
 ## Getting started
 
 Copy `config/defaults.json` to `config/local.json` and fill out your mailgun credentials.
+Use a wordpress account to create an [Akismet](https://akismet.com/account/) api key.
 
 **From the command line**
 

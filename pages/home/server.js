@@ -2,7 +2,6 @@ var crypto = require('crypto')
 var makeRouteKeys = require('../routes/keys')
 
 module.exports = function (app, db) {
-
   // Store messages that we recieve as posts, if we find a matching route
   app.post('/:domain*', (req, res) => {
     var domain = req.params.domain
@@ -42,7 +41,7 @@ module.exports = function (app, db) {
 
 // Return url if absolute. Append url to referer if not.
 function makeRedirect (url, referer) {
-  return url.indexOf('http') === 0  ? url : referer + url
+  return url.indexOf('http') === 0 ? url : referer + url
 }
 
 function makeValue (req, domain, path, route) {
@@ -51,7 +50,8 @@ function makeValue (req, domain, path, route) {
     body: req.body,
     headers: {
       referer: req.headers.referer,
-      'user-agent': req.headers.userAgent
+      remoteAddress: req.connection.remoteAddress,
+      'user-agent': req.headers['user-agent']
     },
     route: route,
     createdAt: Date.now()
