@@ -1,6 +1,6 @@
 {
   "name": "post",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "description": "Handle simple form posts",
   "main": "server.js",
   "scripts": {
