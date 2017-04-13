@@ -32,7 +32,8 @@ module.exports = function init (db) {
 }
 
 function sendEmail (message, done) {
-  console.log('EMAIL Message', message)
+  delete message.body['g-recaptcha-response']
+
   var data = {
     to: message.route.email,
     from: 'TABLEFLIP <post@tableflip.io>',
