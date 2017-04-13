@@ -1,23 +1,23 @@
 var config = require('config')
-var akismet = require('akismet-api')
+var request = require('request')
 
 module.exports = function (db) {
   db.on('put', function (key, value) {
-    if (value.headers.hasOwnProperty('X-Spam-Flag')) return
-
-    var client = akismet.client({
-      key: config.akismet.apiKey,
-      blog: 'http://' + value.key.split('/')[0]
-    })
-
-    // the spelling of referrer is 'correct' here
-    client.checkSpam({
-      user_ip: value.headers.remoteAddress,
-      user_agent: value.headers['user-agent'],
-      referrer: value.headers.referer
-    }, function (err, spam) {
+    if (value && value.headers && value.headers.hasOwnProperty('X-Spam-Flag')) return
+    if (!value.key || !value.body || !value.headers) return
+    request({
+      method: 'POST',
+      url: 'https://www.google.com/recaptcha/api/siteverify',
+      json: true,
+      body: {
+        secret: config.google.captcha[value.key],
+        response: value.body['g-recaptcha-response'],
+        remoteip: value.headers.remoteAddress
+      }
+    }, function (err, result) {
       if (err) return console.error(err)
-      value.headers['X-Spam-Flag'] = spam
+      console.log('result from google', result)
+      value.headers['X-Spam-Flag'] = result.success
       db.put(key, value)
     })
   })
