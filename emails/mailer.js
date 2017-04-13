@@ -14,7 +14,6 @@ module.exports = function init (db) {
     if (!value.route.email) return
     if (!value.headers.hasOwnProperty('X-Spam-Flag')) return
     if (value.headers['X-Spam-Flag']) {
-      console.log('Spam from', value.key)
       db.del(key, (err) => {
         if (err) return console.error('Failed to remove msg', key, err)
         return console.log('Removed msg', key)
@@ -33,6 +32,7 @@ module.exports = function init (db) {
 }
 
 function sendEmail (message, done) {
+  console.log('EMAIL Message', message)
   var data = {
     to: message.route.email,
     from: 'TABLEFLIP <post@tableflip.io>',

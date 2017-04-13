@@ -16,7 +16,6 @@ module.exports = function (db) {
       }
     }, function (err, result) {
       if (err) return console.error(err)
-      console.log('result from google', result)
       value.headers['X-Spam-Flag'] = result.success
       db.put(key, value)
     })
