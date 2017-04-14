@@ -7,13 +7,30 @@ Periodically sent on to recipients.
 ## Getting started
 
 Copy `config/defaults.json` to `config/local.json` and fill out your mailgun credentials.
-Create a reCAPTCHA key pair here [https://www.google.com/recaptcha/](https://www.google.com/recaptcha/admin#list) add the domain for the site from which you are posting. Place the secret key in config as follows creating a 'lookup table' with your domain as *key* and secret as *value*:
+Create a reCAPTCHA key pair here [https://www.google.com/recaptcha/](https://www.google.com/recaptcha/admin#list) for the domain from which you are posting.
+
+In the `post-infrastructure` project add the following two pieces of config
+
+* Place the secret key in config as follows creating a 'lookup table' with your domain as *key* and secret as *value*:
 
 ```
 {
   google: {
     captcha: {
-      "new-domain.name": "fp9u_SECRET_KEY_FROM_GOOGLE_8ofw8"
+      "new-domain.name": "_SECRET_KEY_FROM_GOOGLE_"
+    }
+  }
+}
+```
+
+* Add a reference to this in `/roles/post/templates/local.json`
+
+```
+{
+  google: {
+    captcha: {
+      "new-domain.name": "{{secret.google.capcha['new-domain.name']}}",
+      "another-domain": "{{secret.google.capcha['another-domain']}}"
     }
   }
 }
