@@ -7,7 +7,34 @@ Periodically sent on to recipients.
 ## Getting started
 
 Copy `config/defaults.json` to `config/local.json` and fill out your mailgun credentials.
-Use a wordpress account to create an [Akismet](https://akismet.com/account/) api key.
+Create a reCAPTCHA key pair here [https://www.google.com/recaptcha/](https://www.google.com/recaptcha/admin#list) for the domain from which you are posting.
+
+In the `post-infrastructure` project add the following two pieces of config
+
+* Place the secret key in config as follows creating a 'lookup table' with your domain as *key* and secret as *value*:
+
+```
+{
+  google: {
+    captcha: {
+      "new-domain.name": "_SECRET_KEY_FROM_GOOGLE_"
+    }
+  }
+}
+```
+
+* Add a reference to this in `/roles/post/templates/local.json`
+
+```
+{
+  google: {
+    captcha: {
+      "new-domain.name": "{{secret.google.capcha['new-domain.name']}}",
+      "another-domain": "{{secret.google.capcha['another-domain']}}"
+    }
+  }
+}
+```
 
 **From the command line**
 
@@ -22,6 +49,12 @@ Use a wordpress account to create an [Akismet](https://akismet.com/account/) api
 
 ## P O S T usage
 
+Load the google recaptcha api in the `<head>` of the page
+
+```html
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+```
+
 Create an html form. Set `method="post"` the `action` to point to  
 
 `https://post.tableflip.io/butterfield-diet.com`
@@ -29,12 +62,13 @@ Create an html form. Set `method="post"` the `action` to point to
 Replace `butterfield-diet.com` with your domain that will be sending the posts.
 
 ```html
-<form action="https://post.tableflip.io/butterfield-diet.com" method="post">
+<form id="your-form-id" action="https://post.tableflip.io/butterfield-diet.com" method="post">
   <label for="email" class="label">Your email address</label>
   <input id="email" name="email" type="email" required="" class="input border-box">
   <label for="info" class="label">Any info</label>
   <textarea id="info" name="info" rows="3" class="textarea border-box"></textarea>
-  <button class="btn btn-primary">Send</button>
+  <script>function onSubmit (token) {document.getElementById('your-form-id').submit()}</script>
+  <button class="btn btn-primary g-recaptcha" data-sitekey="_PUBLIC_KEY_FROM_GOOGLE_CAPTCHA_" data-callback='onSubmit'>Send</button>
 </form>
 ```
 
