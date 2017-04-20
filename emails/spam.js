@@ -16,7 +16,7 @@ module.exports = function (db) {
       }
     }, function (err, result) {
       if (err) return console.error(err)
-      value.headers['X-Spam-Flag'] = result.success
+      value.headers['X-Spam-Flag'] = !result.success
       db.put(key, value)
     })
   })
