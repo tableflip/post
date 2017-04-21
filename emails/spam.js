@@ -32,15 +32,15 @@ function fetchRecaptchaResult (value, cb) {
   request({
     method: 'POST',
     url: 'https://www.google.com/recaptcha/api/siteverify',
-    json: true,
     body: {
       secret: config.google.captcha[value.key],
       response: value.body['g-recaptcha-response'],
       remoteip: value.headers.remoteAddress
     }
-  }, function (err, result) {
-    if (err) return cb(err)
-    return cb(err, result.success)
+  }, function (err, res, body) {
+      if (err) return cb(err)
+      const json = JSON.parse(body)
+      return cb(err, json.success)
   })
 }
 
