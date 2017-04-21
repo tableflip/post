@@ -13,12 +13,6 @@ module.exports = function init (db) {
     if (!value.route) return
     if (!value.route.email) return
     if (!value.headers.hasOwnProperty('X-Spam-Flag')) return
-    if (value.headers['X-Spam-Flag']) {
-      db.del(key, (err) => {
-        if (err) return console.error('Failed to remove msg', key, err)
-        return console.log('Removed msg', key)
-      })
-    }
 
     setImmediate(() => {
       sendEmail(value, (err) => {
@@ -32,8 +26,6 @@ module.exports = function init (db) {
 }
 
 function sendEmail (message, done) {
-  delete message.body['g-recaptcha-response']
-
   var data = {
     to: message.route.email,
     from: 'TABLEFLIP <post@tableflip.io>',
