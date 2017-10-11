@@ -7,7 +7,6 @@ function spamCheck (db, fetchRecaptchaResult, key, value) {
   // Check if it's our turn to run
   if (value && value.headers && value.headers.hasOwnProperty('X-Spam-Flag')) return
   if (!value.key || !value.body || !value.headers) return
-
   // Site hasn't provide a `g-recaptcha-response` so is misconfigured or is spam
   if (!value.body['g-recaptcha-response']) {
     console.log('Missing `g-recaptcha-response` param on post from ' + key)
@@ -28,6 +27,8 @@ function spamCheck (db, fetchRecaptchaResult, key, value) {
 
 // will call cb with (null, true) if value is from something more human than robot
 function fetchRecaptchaResult (value, cb) {
+  // if you know about post you can skip G recaptcha
+  if (value.body['g-recaptcha-response'] === 'skip') return cb(null, true)
   // ask G if it's spam.
   request({
     method: 'POST',
@@ -38,9 +39,9 @@ function fetchRecaptchaResult (value, cb) {
       remoteip: value.headers.remoteAddress
     }
   }, function (err, res, body) {
-      if (err) return cb(err)
-      const json = JSON.parse(body)
-      return cb(err, json.success)
+    if (err) return cb(err)
+    const json = JSON.parse(body)
+    return cb(err, json.success)
   })
 }
 
@@ -50,3 +51,4 @@ module.exports = function (db) {
 
 // for testing
 module.exports.spamCheck = spamCheck
+module.exports.fetchRecaptchaResult = fetchRecaptchaResult

@@ -76,6 +76,19 @@ The `name` values on your inputs will show up as labels in your notification, to
 
 Use the admin screen at `https://post.tableflip.io/routes` to configure a route for `https://butterfield-diet.com`, to tell it where to send the message, and where to redirect the user afterwards.
 
+## Skip the spam filter
+
+You can be in a situation where you just want to post to post and skip the Google's recaptcha. You can do this by adding a **"skip"** flag on your post's payload:
+
+```json
+  {
+    "name": "Bernard",
+    "email": "bernard@tableflip.io",
+    "open-source": "true",
+    "g-recaptcha-response": "skip"
+  }
+```
+
 ## Level DB
 
 See: http://dailyjs.com/2013/04/18/leveldb-and-node-1/
