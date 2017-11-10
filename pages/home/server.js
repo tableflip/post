@@ -1,3 +1,4 @@
+var url = require('url')
 var crypto = require('crypto')
 var makeRouteKeys = require('../routes/keys')
 
@@ -39,9 +40,11 @@ module.exports = function (app, db) {
   }
 }
 
-// Return url if absolute. Append url to referer if not.
-function makeRedirect (url, referer) {
-  return url.indexOf('http') === 0 ? url : referer + url
+// Return url if absolute. Otherwise `resolve` the url aginst the referer.
+function makeRedirect (redirectUrl, referer) {
+  // We only support http(s) at the moment.
+  if (redirectUrl.indexOf('http') === 0) return redirectUrl
+  return url.resolve(referer, redirectUrl)
 }
 
 function makeValue (req, domain, path, route) {
@@ -64,3 +67,6 @@ function makeKey (value) {
   var key = ['msg', value.createdAt, hash].join('!')
   return key
 }
+
+// For testing
+module.exports.makeRedirect = makeRedirect
