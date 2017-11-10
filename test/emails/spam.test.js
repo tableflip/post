@@ -1,5 +1,6 @@
 const test = require('ava')
 const spamCheck = require('../../emails/spam').spamCheck
+const fetchRecaptchaResult = require('../../emails/spam').fetchRecaptchaResult
 
 test.cb('spam is deleted', t => {
   const message = {
@@ -72,4 +73,18 @@ test.cb('ham is preserved', t => {
     cb(null, true)
   }
   spamCheck(db, fetchRecaptchaResult, message.key, message)
+})
+
+test.cb('You can skip google recaptcha', t => {
+  const value = {
+    body: {
+      'g-recaptcha-response': 'skip'
+    }
+  }
+  const testCallback = (err, isHuman) => {
+    t.falsy(err, 'there is no error')
+    t.truthy(isHuman, 'you can skip validation')
+    t.end()
+  }
+  fetchRecaptchaResult(value, testCallback)
 })

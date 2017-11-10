@@ -37,5 +37,3 @@ module.exports = function (app, db) {
     sendValues(db, makeKeys(), res)
   })
 }
-
-
