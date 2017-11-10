@@ -15,6 +15,12 @@ test('Sensible redirects are chosen', t => {
   )
 
   t.is(
+    makeRedirect('sent-ok', 'https://tableflip.io/foo/contact-us/'),
+    'https://tableflip.io/foo/contact-us/sent-ok',
+    'and trailing slashes are a thing'
+  )
+
+  t.is(
     makeRedirect('../thanks', 'https://tableflip.io/foo/bar/contact-us'),
     'https://tableflip.io/foo/thanks',
     'traversals are traversed'
