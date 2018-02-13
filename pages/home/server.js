@@ -7,10 +7,30 @@ module.exports = function (app, db) {
   app.post('/:domain*', (req, res) => {
     var domain = req.params.domain
     var path = req.params[0]
+    var noRedirect = req.query && req.query.noRedirect === "true"
+
+    var respond = function (statusCode, route, referer) {
+      if (noRedirect || statusCode === 404) {
+        // no route configured, domain or route specifc.
+        return res.status(statusCode).end()
+      }
+      if (statusCode === 500) {
+        // Misc fail. Send them home.
+        return res.redirect('back')
+      }
+      if (statusCode === 403) {
+        // Route found, but no can do
+        res.redirect(makeRedirect(route.redirectError, referer))
+      }
+      if (statusCode === 200) {
+        // Winner
+        res.redirect(makeRedirect(route.redirect, referer))
+      }
+    }
 
     findRoute(domain, path, (err, route) => {
-      if (err && err.notfound) return res.sendStatus(404) // no route configured, domain or route specifc.
-      if (err) return res.redirect('back') // Misc fail. Send them home.
+      if (err && err.notfound) return respond(404)
+      if (err) return respond(500)
 
       // we have a winner. Store the msg.
       var value = makeValue(req, domain, path, route)
@@ -20,9 +40,9 @@ module.exports = function (app, db) {
       db.put(key, value, (err, data) => {
         if (err) {
           console.error('Failed to save message', key, value, err.message)
-          return res.redirect(makeRedirect(route.redirectError, referer))
+          return respond(403, route, referer)
         }
-        res.redirect(makeRedirect(route.redirect, referer))
+        respond(200, route, referer)
       })
     })
   })
