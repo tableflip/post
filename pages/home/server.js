@@ -5,6 +5,7 @@ var makeRouteKeys = require('../routes/keys')
 module.exports = function (app, db) {
   // Store messages that we recieve as posts, if we find a matching route
   app.post('/:domain*', (req, res) => {
+    console.log('ROUTE!', '/:domain*', req.url)
     var domain = req.params.domain
     var path = req.params[0]
     var noRedirect = req.query && req.query.noRedirect === "true"
@@ -20,16 +21,17 @@ module.exports = function (app, db) {
       }
       if (statusCode === 403) {
         // Route found, but no can do
-        res.redirect(makeRedirect(route.redirectError, referer))
+        return res.redirect(makeRedirect(route.redirectError, referer))
       }
       if (statusCode === 200) {
         // Winner
-        res.redirect(makeRedirect(route.redirect, referer))
+        return res.redirect(makeRedirect(route.redirect, referer))
       }
     }
 
     findRoute(domain, path, (err, route) => {
-      if (err && err.notfound) return respond(404)
+      if (err) { console.log(err) }
+      if (err && err.type === 'NotFoundError') return respond(404)
       if (err) return respond(500)
 
       // we have a winner. Store the msg.
@@ -70,7 +72,7 @@ function makeRedirect (redirectUrl, referer) {
 function makeValue (req, domain, path, route) {
   return {
     key: path ? domain + path : domain,
-    body: req.body,
+    body: req.fields,
     headers: {
       referer: req.headers.referer,
       remoteAddress: req.connection.remoteAddress,
