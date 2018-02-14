@@ -5,14 +5,17 @@ var spam = require('./emails/spam.js')(db)
 var config = require('config')
 var corser = require('corser')
 var express = require('express')
+var morgan = require('morgan')
 var bodyParser = require('body-parser')
+var formidable = require('express-formidable')
 
 var app = express()
 app.enable('trust proxy')
 app.disable('x-powered-by')
+app.use(morgan('short'))
 app.use(corser.create())
 app.use(express.static('dist'))
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(formidable())
 
 var routes = [
   require('./pages/routes/server.js'),

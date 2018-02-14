@@ -7,18 +7,19 @@ module.exports = function (app, db) {
 
   // Create route
   app.post('/routes', function (req, res) {
-    var referer = url.parse(req.body.referer, true, true)
+    console.log('ROUTE!', '/routes', req.url)
+    var referer = url.parse(req.fields.referer, true, true)
     var keys = makeKeys(referer.host, referer.path)
     var data = {
-      email: req.body.email,
-      referer: req.body.referer,
-      redirect: req.body.redirect,
-      redirectError: req.body.redirectError
+      email: req.fields.email,
+      referer: req.fields.referer,
+      redirect: req.fields.redirect,
+      redirectError: req.fields.redirectError
     }
     db.put(keys[0], data, function (err) {
       if (err) {
-        res.sendStatus(500)
-        console.error('Error routes', err.message)
+        console.log('Error routes', err.message)
+        return res.sendStatus(500)
       }
       res.redirect('back')
     })
